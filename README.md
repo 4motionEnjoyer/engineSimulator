@@ -8,6 +8,8 @@ V0.002 Crankshaft rotation simulator done (backgroundworker), physics engine (so
 
 V0.003 Sounds work for idle and acceleration, but not for decel. Radiobuttons in accordance to cylinder firing done. Accel button raises rpm like in real life.
 
+V0.004 Added pop-bang decel.
+
 References added: 
 
 Presentation core
