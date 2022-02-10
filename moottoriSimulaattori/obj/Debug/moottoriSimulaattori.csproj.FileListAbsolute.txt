@@ -1,0 +1,8 @@
+C:\Users\leevi\Documents\SharpDevelop Projects\moottoriSimulaattori\moottoriSimulaattori\bin\Debug\moottoriSimulaattori.exe
+C:\Users\leevi\Documents\SharpDevelop Projects\moottoriSimulaattori\moottoriSimulaattori\bin\Debug\moottoriSimulaattori.pdb
+C:\Users\leevi\Documents\SharpDevelop Projects\moottoriSimulaattori\moottoriSimulaattori\obj\Debug\moottoriSimulaattori.MainForm.resources
+C:\Users\leevi\Documents\SharpDevelop Projects\moottoriSimulaattori\moottoriSimulaattori\obj\Debug\moottoriSimulaattori.csproj.GenerateResource.Cache
+C:\Users\leevi\Documents\SharpDevelop Projects\moottoriSimulaattori\moottoriSimulaattori\obj\Debug\moottoriSimulaattori.exe
+C:\Users\leevi\Documents\SharpDevelop Projects\moottoriSimulaattori\moottoriSimulaattori\obj\Debug\moottoriSimulaattori.pdb
+C:\Users\leevi\Documents\SharpDevelop Projects\moottoriSimulaattori\moottoriSimulaattori\obj\Debug\moottoriSimulaattori.csproj.AssemblyReference.cache
+C:\Users\leevi\Documents\SharpDevelop Projects\moottoriSimulaattori\moottoriSimulaattori\obj\Debug\moottoriSimulaattori.csproj.CoreCompileInputs.cache
