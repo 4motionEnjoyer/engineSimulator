@@ -45,7 +45,6 @@ namespace moottoriSimulaattori
             this.label1 = new System.Windows.Forms.Label();
             this.button_accPedal = new System.Windows.Forms.Button();
             this.button_ignition = new System.Windows.Forms.Button();
-            this.button_test = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // radioButton_cylinder4
@@ -132,22 +131,11 @@ namespace moottoriSimulaattori
             this.button_ignition.UseVisualStyleBackColor = true;
             this.button_ignition.Click += new System.EventHandler(this.Button_ignitionClick);
             // 
-            // button_test
-            // 
-            this.button_test.Location = new System.Drawing.Point(526, 302);
-            this.button_test.Name = "button_test";
-            this.button_test.Size = new System.Drawing.Size(75, 23);
-            this.button_test.TabIndex = 9;
-            this.button_test.Text = "TestButton";
-            this.button_test.UseVisualStyleBackColor = true;
-            this.button_test.Click += new System.EventHandler(this.button_test_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1062, 503);
-            this.Controls.Add(this.button_test);
             this.Controls.Add(this.button_ignition);
             this.Controls.Add(this.button_accPedal);
             this.Controls.Add(this.label1);
@@ -173,6 +161,5 @@ namespace moottoriSimulaattori
 		private System.Windows.Forms.RadioButton radioButton_cylinder2;
 		private System.Windows.Forms.RadioButton radioButton_cylinder3;
 		private System.Windows.Forms.RadioButton radioButton_cylinder4;
-        private System.Windows.Forms.Button button_test;
     }
 }

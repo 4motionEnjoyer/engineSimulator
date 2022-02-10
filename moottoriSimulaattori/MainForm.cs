@@ -5,6 +5,19 @@
 /// V0.001 New project created. Buttons and tacho created alongside rButtons for cylinder bangs. Initial logic for cr bgworker.
 /// V0.002 Crankshaft rotation simulator done (backgroundworker), physics engine (sound at this time) plays sound in accordance to rpm.
 /// V0.003 Sounds work for idle and acceleration, but not for decel. Radiobuttons in accordance to cylinder firing done. Accel button raises rpm like in real life.
+/// V0.004 Added pop-bang decel.
+/// 
+/// To be added:
+/// Audio file pathfinding to work better perhaps
+/// Possibly decel sounds
+/// Bugfixes and testing
+/// 
+/// To be added in far future:
+/// Realistic physic modeling for the effect of injection quantity and air mass / stroke to torque output
+/// Actual torque and power calculation
+/// Realistic turbo with variable nozzle turbine
+/// 
+///
 /// </summary>
 
 using System;
@@ -132,16 +145,24 @@ namespace moottoriSimulaattori
 		void bg_physicsEngine_DoWork(object sender, DoWorkEventArgs e)
         {
 			bool soundLatch = false;            //latching for sound so no more than 1 is plaid when hitting TDC of cyl. 
+			bool bangLatch = false;
+			double old_specRPS = 0;
+			Stopwatch bangTimer = new Stopwatch();
 		
 			MediaPlayer cyl1 = new MediaPlayer();
 			MediaPlayer cyl2 = new MediaPlayer();
+			MediaPlayer popbang1 = new MediaPlayer();
+			MediaPlayer popbang2 = new MediaPlayer();
 			cyl1.Open(new System.Uri(@"C:\Users\leevi\Documents\SharpDevelop Projects\moottoriSimulaattori\moottoriSimulaattori\Sound\tdishort.wav"));
 			cyl2.Open(new System.Uri(@"C:\Users\leevi\Documents\SharpDevelop Projects\moottoriSimulaattori\moottoriSimulaattori\Sound\tdishort.wav"));
+			popbang1.Open(new System.Uri(@"C:\Users\leevi\Documents\SharpDevelop Projects\moottoriSimulaattori\moottoriSimulaattori\Sound\popbang1.wav"));
+			popbang2.Open(new System.Uri(@"C:\Users\leevi\Documents\SharpDevelop Projects\moottoriSimulaattori\moottoriSimulaattori\Sound\popbang2.wav"));
 
 
 			while (!bg_physicsEngine.CancellationPending)
             {
-				
+				old_specRPS = specRPS;					//with this helper var we can analyze if the rpm is increasing or decreasing
+
 				if(engine.crAngle > 87 && soundLatch == false)			//4 cylinders mean that there are two reciprocating pairs. One power stroke happens every 180* of crankshaft rotation
                 {                                                       //however, this approximation is a bit wrong as 4cyl engines the piston doesn't move with linear speed, it is faster near BDC, but this approx is good enough for now
 					cyl1.Play();										//the positive cr TDC is to cyls 1 and 4
@@ -169,11 +190,29 @@ namespace moottoriSimulaattori
 
 				if(accPedalPress == false && specRPS > 14.3)			//when accelerator is depressed, the revs will lower as the torque requested from engine will be enough to idle it.
                 {
-					specRPS = specRPS - 5;
+					specRPS = specRPS - 2;
 					Thread.Sleep(20);
                 }
 
-				bg_physicsEngine.ReportProgress(0);			//used for updating the tachometer
+				if(specRPS + 1 < old_specRPS && old_specRPS > 40 && bangLatch == false)			//if the rpm is falling and it has been high enough
+                {
+					bangTimer.Start();
+					popbang1.Play();
+					bangLatch = true;														//we get bangs from exhaust
+                }
+
+				if (specRPS < 40)
+				{
+					bangLatch = false;
+					popbang1.Stop();
+				}
+
+				if (bangTimer.ElapsedMilliseconds > 2000)
+				{
+					popbang1.Stop();
+					bangTimer.Reset();
+				}
+					bg_physicsEngine.ReportProgress(0);			//used for updating the tachometer
 
 			}
 		}
@@ -240,73 +279,6 @@ namespace moottoriSimulaattori
 				bg_physicsEngine.CancelAsync();
 			
 		}
-
-
-        private void button_test_Click(object sender, EventArgs e)
-        {
-			MediaPlayer cyl1 = new MediaPlayer();
-			MediaPlayer cyl2 = new MediaPlayer();
-			MediaPlayer cyl3 = new MediaPlayer();
-			MediaPlayer cyl4 = new MediaPlayer();
-			cyl1.Open(new System.Uri(@"C:\Users\leevi\Documents\SharpDevelop Projects\moottoriSimulaattori\moottoriSimulaattori\Sound\tdishort.wav"));
-			cyl2.Open(new System.Uri(@"C:\Users\leevi\Documents\SharpDevelop Projects\moottoriSimulaattori\moottoriSimulaattori\Sound\tdishort.wav"));
-			cyl3.Open(new System.Uri(@"C:\Users\leevi\Documents\SharpDevelop Projects\moottoriSimulaattori\moottoriSimulaattori\Sound\tdishort.wav"));
-			cyl4.Open(new System.Uri(@"C:\Users\leevi\Documents\SharpDevelop Projects\moottoriSimulaattori\moottoriSimulaattori\Sound\tdishort.wav"));
-
-
-			for (int n = 0; n < 10; n++)
-			{
-				cyl1.Play();
-				Thread.Sleep(38);
-				cyl1.Stop();
-				cyl2.Play();
-				Thread.Sleep(38);
-				cyl2.Stop();
-				cyl3.Play();
-				Thread.Sleep(38);
-				cyl3.Stop();
-				cyl4.Play();
-				Thread.Sleep(38);
-				cyl4.Stop();
-			}
-
-			for (int n = 0; n < 60; n++)
-			{
-				cyl1.Play();
-				Thread.Sleep(5);
-				cyl1.Stop();
-				cyl2.Play();
-				Thread.Sleep(5);
-				cyl2.Stop();
-				cyl3.Play();
-				Thread.Sleep(5);
-				cyl3.Stop();
-				cyl4.Play();
-				Thread.Sleep(5);
-				cyl4.Stop();
-			}
-
-			/*var player1 = new System.Windows.Media.MediaPlayer();
-			player1.Open(new System.Uri(@"C:\Users\leevi\Documents\SharpDevelop Projects\moottoriSimulaattori\moottoriSimulaattori\Sound\tdishort.wav"));
-
-			var player2 = new System.Windows.Media.MediaPlayer();
-			player2.Open(new System.Uri(@"C:\Users\leevi\Documents\SharpDevelop Projects\moottoriSimulaattori\moottoriSimulaattori\Sound\tdishort.wav"));
-
-			int i = 0;
-			Thread.Sleep(100);
-
-			while (i < 100)
-			{
-				player1.Play();
-				Thread.Sleep(100);
-				player2.Play();
-				Thread.Sleep(100);
-				i++;
-			}
-			*/
-
-		}
-
 
         private void button_accPedal_MouseUp(object sender, MouseEventArgs e)
         {
